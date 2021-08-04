@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BASE_URL } from '../../utils/api';
 
 //Components
@@ -6,15 +6,18 @@ import Slider from '../Slider/Slider';
 import WeatherWidget from '../WeatherWidget/WeatherWidget';
 import Loader from '../Loading/Loader';
 
-//Images
-
+//Icons
+import { CgArrowUpO } from 'react-icons/cg';
 //Styles
 import {
+  Compass,
+  Info,
   Wrapper,
   Header,
   Location,
   CityName,
   ImageWrapper,
+  Image,
   Form,
   Submit,
   Search,
@@ -26,6 +29,12 @@ import {
 
 //Icons
 import { BiSearchAlt } from 'react-icons/bi';
+
+//Animation
+const variants = {
+  visible: { opacity: 1 },
+  hidden: { opacity: 0 },
+};
 
 function WeatherApp() {
   const [query, setQuery] = useState('');
@@ -45,12 +54,24 @@ function WeatherApp() {
   });
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(true);
+  const [message, setMessage] = useState('test');
+  const [weatherMessage, setWeatherMessage] = useState('');
+
+  //Get search value and set to query
+
+  const handleChange = (event) => {
+    setQuery(event.target.value.trim());
+  };
+
+  // On submit run get weather function and passing query into it
 
   const handleSubmit = (event) => {
     event.preventDefault();
     getWeather(query);
     setQuery('');
   };
+
+  // Request data from api using query input
 
   const getWeather = async (query) => {
     setLoading(true);
@@ -63,39 +84,69 @@ function WeatherApp() {
       }
       const data = await response.json();
       setWeather({
-        temp: data.data[0].temp,
+        temp: data.data[0].temp + 'c',
         sunrise: data.data[0].sunrise,
         sunset: data.data[0].sunset,
-        wind: Math.floor(data.data[0].wind_spd),
-        windDir: data.data[0].wind_dir,
-        code: data.data[0].weather.code,
+        wind: Math.floor(data.data[0].wind_spd) + 'm/s',
+        windDir: Math.floor(data.data[0].wind_dir),
+        code: data.data[0].weather.code + '%',
         cityName: data.data[0].city_name,
-        humidity: Math.floor(data.data[0].rh),
-        vis: data.data[0].vis,
+        humidity: Math.floor(data.data[0].rh) + '%',
+        vis: data.data[0].vis + 'km',
         clouds: data.data[0].clouds,
         icon: data.data[0].weather.icon,
         description: data.data[0].weather.description,
       });
       console.log(data.data[0]);
+
+      //set city messsage
+      if (data.data[0].temp < 10) {
+        setWeatherMessage(
+          `Warm clothes needed ${data.data[0].city_name}'s cold`
+        );
+      } else if (data.data[0].temp < 20) {
+        setWeatherMessage(`Its pretty mild in ${data.data[0].city_name} `);
+      } else if (data.data[0].temp < 30) {
+        setWeatherMessage(`Hot day in ${data.data[0].city_name}`);
+      } else if (data.data[0].temp < 40) {
+        setWeatherMessage(`Smoking hot in ${data.data[0].city_name}`);
+      } else {
+        setWeatherMessage('unknown');
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleChange = (event) => {
-    setQuery(event.target.value.trim());
-  };
+  // useEffect(() => {
+  //   switch (weather.temp) {
+  //     case weather.temp > 0 && weather.temp < 10:
+  //       setWeatherMessage(`Warm clothes needed ${weather.cityName}'s cold`);
+  //       break;
+  //     case weather.temp > 10 && weather.temp < 20:
+  //       setWeatherMessage(`Nice and mild in ${weather.cityName}`);
+  //       break;
+  //     case weather.temp > 20 && weather.temp < 30:
+  //       setWeatherMessage(`Is it me or is ${weather.cityName} just hot`);
+  //       break;
+  //     case weather.temp > 30 && weather.temp < 40:
+  //       setWeatherMessage(`Smoking hot in ${weather.cityName}`);
+  //       break;
+  //     default:
+  //       setWeatherMessage('');
+  //   }
+  // }, [weather.temp, weather.cityName]);
 
   return (
     <Wrapper>
       <Header>
-        <Location>{query ? query : 'Hugg Weather App'}</Location>
-        <CityName>{weather.cityName}</CityName>
+        <Location>{query ? query : 'Hugg Weather ☀'}</Location>
+        <CityName>{weatherMessage}</CityName>
       </Header>
 
       <Form onSubmit={handleSubmit}>
         <Search
-          placeholder="Search"
+          placeholder="Enter City Name"
           type="text"
           name="search"
           // value={query}
@@ -106,16 +157,38 @@ function WeatherApp() {
         </Submit>
       </Form>
 
-      {loading ? (
-        <Loader />
+      {!weather.temp ? (
+        <ImageWrapper>
+          <Loader />
+        </ImageWrapper>
       ) : (
-        // <ImageWrapper src={require(`../../img/weather/${weather.icon}`)}/>
-        <ImageWrapper
-          alt={weather.description}
-          src={require(`../../img/weather/${weather.icon}.png`).default}
-        />
+        <ImageWrapper>
+          <Image
+            alt={weather.description}
+            src={require(`../../img/weather/${weather.icon}.png`).default}
+            initial="hidden"
+            animate="visible"
+            variants={variants}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+          />
+        </ImageWrapper>
       )}
       <Slider setSelect={setSelect} />
+
+      <Info>
+        <WeatherDetails>
+          <WeatherDetailsHeader>Sunrise</WeatherDetailsHeader>
+          <WeatherDetailsMetric>{weather.sunrise}</WeatherDetailsMetric>
+        </WeatherDetails>
+        <WeatherDetails>
+          <WeatherDetailsHeader>Weather</WeatherDetailsHeader>
+          <WeatherDetailsMetric>{weather.description}</WeatherDetailsMetric>
+        </WeatherDetails>
+        <WeatherDetails>
+          <WeatherDetailsHeader>Sunset</WeatherDetailsHeader>
+          <WeatherDetailsMetric>{weather.sunset}</WeatherDetailsMetric>
+        </WeatherDetails>
+      </Info>
 
       <WeatherDetailsWrapper>
         <WeatherDetails>
@@ -123,15 +196,15 @@ function WeatherApp() {
             {select ? 'Temp' : 'Humidity'}
           </WeatherDetailsHeader>
           <WeatherDetailsMetric>
-            {select ? weather.temp + 'c' : weather.humidity + '%'}
+            {select ? weather.temp : weather.humidity}
           </WeatherDetailsMetric>
         </WeatherDetails>
         <WeatherDetails>
           <WeatherDetailsHeader>
-            {select ? 'Wind' : 'Visibility'}
+            {select ? 'Wind Speed' : 'Visibility'}
           </WeatherDetailsHeader>
           <WeatherDetailsMetric>
-            {select ? weather.wind + 'm/s' : weather.vis + 'km'}
+            {select ? weather.wind : weather.vis}
           </WeatherDetailsMetric>
         </WeatherDetails>
         <WeatherDetails>
@@ -139,7 +212,13 @@ function WeatherApp() {
             {select ? 'Wind Direction' : 'Cloud Coverage'}
           </WeatherDetailsHeader>
           <WeatherDetailsMetric>
-            {select ? weather.windDir + 'deg' : weather.clouds + '%'}
+            {select ? (
+              <Compass deg={weather.windDir}>
+                {weather.temp && <CgArrowUpO />}
+              </Compass>
+            ) : (
+              weather.clouds
+            )}
           </WeatherDetailsMetric>
         </WeatherDetails>
       </WeatherDetailsWrapper>

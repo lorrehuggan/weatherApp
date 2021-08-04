@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
   align-items: center;
   justify-content: space-between;
   position: relative;
-  outline: 2px solid black;
+  outline: 4px solid #fff;
   cursor: pointer;
 `;
 
@@ -24,13 +24,14 @@ export const Box = styled.div`
   z-index: 2;
   small {
     font-weight: 900;
+    color: #141414;
   }
 `;
 
 export const Slide = styled.div`
   width: 50%;
   height: 2.5rem;
-  background-color: #24ace8;
+  background-color: rgba(55, 126, 138, 1);
   border-radius: 1rem;
   position: absolute;
   left: ${(props) => props.select};

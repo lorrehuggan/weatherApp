@@ -18,10 +18,10 @@ function Slider({ setSelect }) {
   return (
     <Wrapper onClick={onClickHandler}>
       <Box>
-        <small>Forecast</small>
+        <small>Temp</small>
       </Box>
       <Box>
-        <small>Air Quality</small>
+        <small>Humidity</small>
       </Box>
       <Slide select={slide} />
     </Wrapper>

@@ -19,7 +19,7 @@ export const GlobalStyle = createGlobalStyle`
 body {
     font-family: 'Lato', sans-serif;
     overflow: hidden;
-    background-color: #eee;
+    background-color: rgba(55, 126, 138, 1);
 }
 
 
