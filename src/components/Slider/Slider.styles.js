@@ -11,6 +11,7 @@ export const Wrapper = styled.div`
   justify-content: space-between;
   position: relative;
   outline: 2px solid black;
+  cursor: pointer;
 `;
 
 export const Box = styled.div`
@@ -32,6 +33,6 @@ export const Slide = styled.div`
   background-color: #24ace8;
   border-radius: 1rem;
   position: absolute;
-  left: 0;
-  box-shadow: 10px 0px 20px 0px rgba(0, 0, 0, 0.54);
+  left: ${(props) => props.select};
+  transition: left 0.3s ease;
 `;

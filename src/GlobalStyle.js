@@ -18,7 +18,8 @@ export const GlobalStyle = createGlobalStyle`
 
 body {
     font-family: 'Lato', sans-serif;
-
+    overflow: hidden;
+    background-color: #eee;
 }
 
 

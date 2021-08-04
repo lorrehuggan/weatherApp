@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const Wrapper = styled.div`
   height: 50.75rem;
-  width: 23.4375rem;
+  width: 28.4375rem;
   background: rgb(39, 42, 105);
   background: radial-gradient(
     circle,
@@ -18,7 +18,7 @@ export const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
   overflow: hidden;
-  border: 4px solid black;
+  border: 2px solid black;
 `;
 
 export const Header = styled.div`
@@ -32,14 +32,15 @@ export const Header = styled.div`
 `;
 
 export const Location = styled.h3`
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.25rem;
   color: #ffffff;
   font-size: var(--headlineSmall);
+  text-transform: capitalize;
 `;
 
-export const Date = styled.p`
+export const CityName = styled.p`
   color: #ffffff;
-  font-size: var(--fontMedium);
+  font-size: var(--fontBig);
 `;
 
 export const ImageWrapper = styled.img`
@@ -57,6 +58,8 @@ export const WeatherDetailsWrapper = styled.div`
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  position: absolute;
+  bottom: 0;
 `;
 
 export const WeatherDetails = styled.div`
@@ -77,4 +80,35 @@ export const WeatherDetailsMetric = styled.p`
   color: #ffffff;
   font-size: var(--headlineSmall);
   font-weight: 900;
+`;
+
+export const Form = styled.form`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+export const Search = styled.input`
+  border: none;
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 1rem;
+  border-radius: 20px;
+  color: #ffffff;
+  font-size: 1rem;
+
+  &::placeholder {
+    color: #ffffff;
+    font-size: 1rem;
+  }
+`;
+
+export const Submit = styled.button`
+  position: absolute;
+  color: #ffffff;
+  right: 1rem;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
 `;
