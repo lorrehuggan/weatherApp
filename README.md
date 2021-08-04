@@ -1,4 +1,4 @@
-# \*\*Hugg Weather App
+# Hugg Weather App
 
 This project was built with React
 using the [Weatherbit](https://www.weatherbit.io) Api
