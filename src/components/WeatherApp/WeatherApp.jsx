@@ -7,11 +7,6 @@ import WeatherWidget from '../WeatherWidget/WeatherWidget';
 import Loader from '../Loading/Loader';
 
 //Images
-import Cloudy from '../../img/3d weather icons/cloud/7.png';
-import Rain from '../../img/3d weather icons/cloud/7.png';
-import Sunny from '../../img/3d weather icons/cloud/7.png';
-import Storm from '../../img/3d weather icons/cloud/7.png';
-import Snow from '../../img/3d weather icons/cloud/7.png';
 
 //Styles
 import {
@@ -45,6 +40,8 @@ function WeatherApp() {
     humidity: '',
     vis: '',
     clouds: '',
+    icon: 'a01d',
+    description: '',
   });
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(true);
@@ -76,6 +73,8 @@ function WeatherApp() {
         humidity: Math.floor(data.data[0].rh),
         vis: data.data[0].vis,
         clouds: data.data[0].clouds,
+        icon: data.data[0].weather.icon,
+        description: data.data[0].weather.description,
       });
       console.log(data.data[0]);
     } catch (error) {
@@ -107,7 +106,15 @@ function WeatherApp() {
         </Submit>
       </Form>
 
-      {loading ? <Loader /> : <ImageWrapper src={Cloudy} />}
+      {loading ? (
+        <Loader />
+      ) : (
+        // <ImageWrapper src={require(`../../img/weather/${weather.icon}`)}/>
+        <ImageWrapper
+          alt={weather.description}
+          src={require(`../../img/weather/${weather.icon}.png`).default}
+        />
+      )}
       <Slider setSelect={setSelect} />
 
       <WeatherDetailsWrapper>
