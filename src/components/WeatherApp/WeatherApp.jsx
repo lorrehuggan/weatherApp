@@ -3,7 +3,7 @@ import { BASE_URL } from '../../utils/api';
 
 //Components
 import Slider from '../Slider/Slider';
-import WeatherWidget from '../WeatherWidget/WeatherWidget';
+
 import Loader from '../Loading/Loader';
 
 //Icons
@@ -54,7 +54,6 @@ function WeatherApp() {
   });
   const [loading, setLoading] = useState(false);
   const [select, setSelect] = useState(true);
-  const [message, setMessage] = useState('test');
   const [weatherMessage, setWeatherMessage] = useState('');
 
   //Get search value and set to query
@@ -77,7 +76,7 @@ function WeatherApp() {
     setLoading(true);
     try {
       const response = await fetch(
-        `${BASE_URL}&city=${query}&key=a80a713553294ea2851f3f783e9b89cb`
+        `${BASE_URL}&city=${query}&key=${process.env.REACT_APP_API_KEY}`
       );
       if (response.status === 200) {
         setLoading(false);
@@ -99,7 +98,8 @@ function WeatherApp() {
       });
       console.log(data.data[0]);
 
-      //set city messsage
+      //set city Message
+
       if (data.data[0].temp < 10) {
         setWeatherMessage(
           `Warm clothes needed ${data.data[0].city_name}'s cold`
@@ -117,25 +117,6 @@ function WeatherApp() {
       console.log(error);
     }
   };
-
-  // useEffect(() => {
-  //   switch (weather.temp) {
-  //     case weather.temp > 0 && weather.temp < 10:
-  //       setWeatherMessage(`Warm clothes needed ${weather.cityName}'s cold`);
-  //       break;
-  //     case weather.temp > 10 && weather.temp < 20:
-  //       setWeatherMessage(`Nice and mild in ${weather.cityName}`);
-  //       break;
-  //     case weather.temp > 20 && weather.temp < 30:
-  //       setWeatherMessage(`Is it me or is ${weather.cityName} just hot`);
-  //       break;
-  //     case weather.temp > 30 && weather.temp < 40:
-  //       setWeatherMessage(`Smoking hot in ${weather.cityName}`);
-  //       break;
-  //     default:
-  //       setWeatherMessage('');
-  //   }
-  // }, [weather.temp, weather.cityName]);
 
   return (
     <Wrapper>
@@ -222,7 +203,6 @@ function WeatherApp() {
           </WeatherDetailsMetric>
         </WeatherDetails>
       </WeatherDetailsWrapper>
-      {/* <WeatherWidget sunrise={weather.sunrise} sunset={weather.sunset} /> */}
     </Wrapper>
   );
 }
