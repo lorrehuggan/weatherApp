@@ -1,11 +1,6 @@
 import React from 'react';
 //Styles
-import {
-  Wrapper,
-  Weather,
-  WeatherImage,
-  WeatherDetails,
-} from './WeatherWidget.styles';
+import { Wrapper, Weather, WeatherDetails } from './WeatherWidget.styles';
 
 function WeatherWidget({ sunset, sunrise }) {
   return (
@@ -16,12 +11,6 @@ function WeatherWidget({ sunset, sunrise }) {
           <p>{sunrise}</p>
         </WeatherDetails>
       </Weather>
-      {/* <Weather>
-        <WeatherDetails>
-          <small>Day 2</small>
-          <p>29 c</p>
-        </WeatherDetails>
-      </Weather> */}
       <Weather>
         <WeatherDetails>
           <small>sunset</small>
